@@ -1,5 +1,5 @@
 <template>
-  <form @submit='submitLink' class="links">
+  <form @submit.prevent='submitLink' class="links">
 
     <SectionHeader>
       Сообщение пользователям
@@ -19,15 +19,10 @@
 
     <InputFile
       class='mt-3'
-      disabled
-      @get-file='getImage'
+      @get-image='getImage'
     />
 
-    <div class="alert alert-warning mt-3 w-50" role="alert">
-      Отправка фотографии в режиме разработки
-    </div>
-
-    <button class="btn btn-primary">
+    <button class="btn btn-primary mt-3">
       Отправить
     </button>
 
@@ -46,13 +41,22 @@ export default {
     }
   },
   methods: {
-    async submitLink(e) {
-      e.preventDefault();
-      await this.axios.post('http://localhost:4000/links', {message: this.text});
+    async submitLink() {
+      const formData = new FormData();
+      formData.append('message', this.text)
+      formData.append('image', this.image)
+
+      console.log(formData)
+      console.log(this.text, this.image)
+
+      await this.axios.post('http://localhost:4000/links', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
     },
     getImage(file) {
       this.image = file;
-      console.log(file)
     }
   }
 }
