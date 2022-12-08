@@ -1,59 +1,61 @@
 // Middleware
-const handleStart = require('./controller/handleStart')
-const handlerMessage = require('./controller/handleMessage');
-const handleCallback = require('./controller/handleCallback');
+const handleStart = require("./controller/handleStart");
+const handlerMessage = require("./controller/handleMessage");
+const handleCallback = require("./controller/handleCallback");
 
 // Router
-const { router: linksRouter } = require('../routes/links');
+const { router: linksRouter } = require("../routes/links");
 
 // Models
-const User = require('../models/User');
+const User = require("../models/User");
 
 // Payment
-const getQiwiPayment = require('./payment/getQiwiPayment');
+const getQiwiPayment = require("./payment/getQiwiPayment");
 
 // Packages
-const TelegramBotApi = require('node-telegram-bot-api');
+const TelegramBotApi = require("node-telegram-bot-api");
 
 const startBot = async (TOKEN, text, image) => {
   try {
     const bot = new TelegramBotApi(TOKEN, { polling: true });
 
-    console.log('Bot started...')
-    
+    console.log("Bot started...");
+
     bot.setMyCommands([
-      {command: '/start', description: 'Начало работы с ботом'}
-    ])
-    
+      { command: "/start", description: "Начало работы с ботом" },
+    ]);
+
     const wallet = await getQiwiPayment();
 
     // Start message
-    bot.onText(/start/, await handleStart(bot, text, image))
-    
-    bot.on('message', await handlerMessage(bot))
+    bot.onText(/start/, await handleStart(bot, text, image));
+
+    bot.on("message", await handlerMessage(bot));
 
     // Callback
-    bot.on('callback_query', await handleCallback(bot, wallet))
+    bot.on("callback_query", await handleCallback(bot, wallet));
 
-    bot.on('polling_error', () => {})
+    bot.on("polling_error", () => {});
 
     // Router requests
-    linksRouter.post('/',  async (req, res) => {
+    linksRouter.post("/", async (req, res) => {
       const { message } = req.body;
-      const { image } = req.files;
+      const image = req.files?.image;
       const users = await User.find();
 
-      users.forEach(async ({chatId}) => {
+      users.forEach(async ({ chatId }) => {
         await bot.sendMessage(chatId, message);
+        if (!image) return;
         await bot.sendPhoto(chatId, image.data);
-      })
-    
-      res.status(201).json('Сообщение было успешно отправлено всем пользователям')
-    })
+      });
 
+      res
+        .status(201)
+        .json("Сообщение было успешно отправлено всем пользователям");
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-module.exports = startBot
+module.exports = startBot;
