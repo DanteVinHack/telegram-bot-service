@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const Routers = require('./routes/index');
+const fileUpload = require('express-fileupload');
 
 const mongoose = require('mongoose');
 const Setting = require('./models/Setting');
@@ -21,7 +22,8 @@ const WebSocketServer = require('websocket').server;
 const app = express();
 
 app.use(express.json());
-app.use(morgan('dev'))
+app.use(fileUpload());
+app.use(morgan('dev'));
 app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Connection all routers
