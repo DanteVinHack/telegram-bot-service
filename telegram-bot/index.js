@@ -38,14 +38,14 @@ const startBot = async (TOKEN, text, image) => {
     bot.on('polling_error', () => {})
 
     // Router requests
-    linksRouter.post('/', async (req, res) => {
+    linksRouter.post('/',  async (req, res) => {
       const { message } = req.body;
+      const { image } = req.files;
       const users = await User.find();
 
-      console.log(message)
-    
-      users.forEach(async user => {
-        await bot.sendMessage(user.chatId, message)
+      users.forEach(async ({chatId}) => {
+        await bot.sendMessage(chatId, message);
+        await bot.sendPhoto(chatId, image.data);
       })
     
       res.status(201).json('Сообщение было успешно отправлено всем пользователям')
