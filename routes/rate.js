@@ -19,6 +19,14 @@ router.put("/", async (req, res) => {
   res.status(201).json("Update");
 });
 
+router.put("/replace", async (req, res) => {
+  const [currentRate, replacedRate] = req.body;
+
+  await Rate.updateOne({ _id: currentRate._id }, { $set: currentRate });
+  await Rate.updateOne({ _id: replacedRate._id }, { $set: replacedRate });
+  res.status(201).json("Update");
+});
+
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
