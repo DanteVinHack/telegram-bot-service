@@ -7,7 +7,7 @@
     "start": "node index.js",
     "server": "nodemon index.js",
     "client": "npm run serve --prefix client",
-    "dev": "concurrently --raw 'npm run server' 'npm run client'"
+    "dev": "concurrently --raw \"npm run server\" \"npm run client\""
   },
   "keywords": [
     "nodejs",
@@ -19,7 +19,7 @@
   "author": "Dante <VentilyatorTag@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.5.0",
+    "concurrently": "^7.6.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {

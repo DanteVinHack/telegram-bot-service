@@ -6,7 +6,7 @@ module.exports = bot => {
     const chatId = msg.chat.id;
     const { text } = msg;
 
-    if (text.trim() === '/start') return;
+    if (String(text).trim() === '/start') return;
   
     switch(text) {
       case '💵 Приобрести доступ':
@@ -20,7 +20,7 @@ module.exports = bot => {
           await bot.sendMessage(chatId, 'У вас нет купленных тарифов')
         break
       case '👩🏻‍💻 Тех. поддержка':
-          await bot.sendMessage(chatId, 'Написать о проблеме вы можете сюда darkhelper')
+          await bot.sendMessage(chatId, 'Написать о проблеме вы можете сюда @TPhelper')
         break
       default: 
         await bot.sendMessage(chatId, 'Главное меню', {

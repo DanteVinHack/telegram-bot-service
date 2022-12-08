@@ -37,7 +37,7 @@ const serverStart = async () => {
     connectionRouters(Routers)
 
     // Connection mongoose
-    await mongoose.connect('mongodb://localhost:27017/telegram-bot')
+    await mongoose.connect('mongodb://0.0.0.0:27017/telegram-bot')
     console.log('Database connected...')
     
     // Get settings

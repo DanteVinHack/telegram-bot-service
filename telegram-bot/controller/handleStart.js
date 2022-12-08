@@ -1,15 +1,15 @@
 const { v4 } = require('uuid');
-
+const Setting = require('../../models/Setting')
 const User = require('../../models/User');
 
-module.exports = (bot, text, image) => {
+module.exports = (bot, image) => {
 
   return async ({ chat }) => {
     try {
       const chatId = chat.id;
+      const { startText } = await Setting.findOne()
   
-      // await bot.sendPhoto(chatId, image)
-      await bot.sendMessage(chatId, text, {
+      await bot.sendMessage(chatId, startText, {
         reply_markup: {
           keyboard: [
             [{text: '💵 Приобрести доступ' }, {text: '⌛️ Купленные тарифы' }],

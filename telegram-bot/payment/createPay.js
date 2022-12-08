@@ -1,6 +1,7 @@
 const User = require('../../models/User');
 const Rate = require('../../models/Rate');
 const Order = require('../../models/Order');
+const Setting = require('../../models/Setting')
 
 module.exports = async (bot, chatId, user, wallet, _id) => {
   try {

@@ -28,7 +28,7 @@ const startBot = async (TOKEN, text, image) => {
     const wallet = await getQiwiPayment();
 
     // Start message
-    bot.onText(/start/, await handleStart(bot, text, image));
+    bot.onText(/start/, await handleStart(bot));
 
     bot.on("message", await handlerMessage(bot));
 
@@ -44,9 +44,13 @@ const startBot = async (TOKEN, text, image) => {
       const users = await User.find();
 
       users.forEach(async ({ chatId }) => {
-        await bot.sendMessage(chatId, message);
-        if (!image) return;
-        await bot.sendPhoto(chatId, image.data);
+        try {
+          await bot.sendMessage(chatId, message);
+          if (!image) return;
+          await bot.sendPhoto(chatId, image.data);
+        } catch (error) {
+          console.log(error)
+        }
       });
 
       res
