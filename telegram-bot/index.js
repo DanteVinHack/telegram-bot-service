@@ -15,9 +15,9 @@ const getQiwiPayment = require("./payment/getQiwiPayment");
 // Packages
 const TelegramBotApi = require("node-telegram-bot-api");
 
-const startBot = async (TOKEN, text, image) => {
+const startBot = async token => {
   try {
-    const bot = new TelegramBotApi(TOKEN, { polling: true });
+    const bot = new TelegramBotApi(token, { polling: true });
 
     console.log("Bot started...");
 
@@ -28,7 +28,7 @@ const startBot = async (TOKEN, text, image) => {
     const wallet = await getQiwiPayment();
 
     // Start message
-    bot.onText(/start/, await handleStart(bot));
+    bot.onText(/\/start/, await handleStart(bot));
 
     bot.on("message", await handlerMessage(bot));
 
@@ -49,7 +49,7 @@ const startBot = async (TOKEN, text, image) => {
           if (!image) return;
           await bot.sendPhoto(chatId, image.data);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       });
 
