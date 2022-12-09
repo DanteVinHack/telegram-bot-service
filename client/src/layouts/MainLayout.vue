@@ -20,8 +20,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "main-layout",
   components: { NavBar, SideBar },
-  computed: mapGetters(["getUsers"]),
-  created() {
+  methods: mapGetters(["getUsers"]),
+  mounted() {
     this.getUsers();
   },
 };
