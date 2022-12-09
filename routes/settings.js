@@ -23,9 +23,6 @@ router.post("/", async (req, res) => {
   const settings = req.body;
   const startImage = req?.files?.image;
 
-  console.log(settings);
-  console.log(req.body);
-  console.log(req?.files);
   let currentSettings = await Setting.findOne();
 
   const imagePath = path.resolve("static", "startImage.jpg");
