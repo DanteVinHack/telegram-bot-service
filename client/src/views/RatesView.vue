@@ -116,119 +116,117 @@
 </template>
 
 <script>
-  export default {
-    name: "RatesView",
-    data() {
-      return {
-        rates: [],
-        ratesMore: [],
-        draggable: {},
-      };
+export default {
+  name: "RatesView",
+  data() {
+    return {
+      rates: [],
+      ratesMore: [],
+      draggable: {},
+    };
+  },
+  methods: {
+    seeMore(idx) {
+      this.ratesMore.find(more => more.id == idx).more = true;
     },
-    methods: {
-      seeMore(idx) {
-        this.ratesMore.find(more => more.id == idx).more = true;
-      },
-      hideRateBody(idx) {
-        this.ratesMore.find(more => more.id == idx).more = false;
-      },
-      async addRate() {
-        try {
-          const rate = {
-            title: "",
-            body: "",
-            price: 0,
-            link: "",
-          };
+    hideRateBody(idx) {
+      this.ratesMore.find(more => more.id == idx).more = false;
+    },
+    async addRate() {
+      try {
+        const rate = {
+          title: "",
+          body: "",
+          price: 0,
+          link: "",
+        };
 
-          const response = await this.axios.post(
-            "http://localhost:4000/rates",
-            rate
-          );
-
-          this.rates.push(await response.data);
-
-          this.rates.forEach(rate =>
-            this.ratesMore.push({ id: rate._id, more: false })
-          );
-        } catch (error) {
-          console.log(error.message);
-        }
-      },
-      async getRates() {
-        try {
-          this.$store.commit("toggleIsLoading");
-          const response = await this.axios.get("http://localhost:4000/rates");
-
-          this.rates = await response.data;
-
-          this.$store.commit("toggleIsLoading");
-
-          this.rates.forEach(rate =>
-            this.ratesMore.push({
-              id: rate._id,
-              more: false,
-            })
-          );
-        } catch (error) {
-          console.log(error.message);
-        }
-      },
-      changeRate(idx) {
-        this.$router.push(`/rate/${idx}`);
-      },
-      async removeRate(idx) {
-        try {
-          await this.axios.delete(`http://localhost:4000/rate/${idx}`);
-
-          this.rates = this.rates.filter(rate => rate._id !== idx);
-        } catch (err) {
-          console.log(err.message);
-        }
-      },
-      onDragStart(rate) {
-        this.draggable = rate;
-      },
-      onDrop(dropRate) {
-        const dragRate = this.draggable;
-        const cloneDropRate = JSON.parse(JSON.stringify(dropRate));
-
-        console.log(JSON.stringify(dropRate, null, 2));
-
-        Object.entries(dragRate).forEach(
-          ([key, value]) => key === "_id" || (dropRate[key] = value)
-        );
-        Object.entries(cloneDropRate).forEach(
-          ([key, value]) => key === "_id" || (dragRate[key] = value)
+        const response = await this.axios.post(
+          "http://localhost:4000/rates",
+          rate
         );
 
-        this.axios.put(`http://localhost:4000/rate/replace`, [
-          dragRate,
-          dropRate,
-        ]);
-      },
+        this.rates.push(await response.data);
+
+        this.rates.forEach(rate =>
+          this.ratesMore.push({ id: rate._id, more: false })
+        );
+      } catch (error) {
+        console.log(error.message);
+      }
     },
-    async mounted() {
-      this.getRates();
+    async getRates() {
+      try {
+        this.$store.commit("toggleIsLoading");
+        const response = await this.axios.get("http://localhost:4000/rates");
+
+        this.rates = await response.data;
+
+        this.$store.commit("toggleIsLoading");
+
+        this.rates.forEach(rate =>
+          this.ratesMore.push({
+            id: rate._id,
+            more: false,
+          })
+        );
+      } catch (error) {
+        console.log(error.message);
+      }
     },
-  };
+    changeRate(idx) {
+      this.$router.push(`/rate/${idx}`);
+    },
+    async removeRate(idx) {
+      try {
+        await this.axios.delete(`http://localhost:4000/rate/${idx}`);
+
+        this.rates = this.rates.filter(rate => rate._id !== idx);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+    onDragStart(rate) {
+      this.draggable = rate;
+    },
+    onDrop(dropRate) {
+      const dragRate = this.draggable;
+      const cloneDropRate = JSON.parse(JSON.stringify(dropRate));
+
+      Object.entries(dragRate).forEach(
+        ([key, value]) => key === "_id" || (dropRate[key] = value)
+      );
+      Object.entries(cloneDropRate).forEach(
+        ([key, value]) => key === "_id" || (dragRate[key] = value)
+      );
+
+      this.axios.put(`http://localhost:4000/rate/replace`, [
+        dragRate,
+        dropRate,
+      ]);
+    },
+  },
+  async mounted() {
+    this.getRates();
+  },
+};
 </script>
 
 <style>
-  .rate-more {
-    cursor: pointer;
-  }
+.rate-more {
+  cursor: pointer;
+}
 
-  .more-enter-active,
-  .more-leave-active {
-    transition: all 0.5s;
-  }
-  .more-enter,
-  .more-leave-to {
-    transform: translateX(1rem);
-    opacity: 0;
-  }
-  .more-leave-active {
-    position: absolute;
-  }
+.more-enter-active,
+.more-leave-active {
+  transition: all 0.5s;
+}
+.more-enter,
+.more-leave-to {
+  transform: translateX(1rem);
+  opacity: 0;
+}
+.more-leave-active {
+  position: absolute;
+}
 </style>
