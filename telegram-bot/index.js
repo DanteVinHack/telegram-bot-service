@@ -43,13 +43,15 @@ const startBot = async token => {
       const image = req.files?.image;
       const users = await User.find();
 
+      console.log(message)
+
       users.forEach(async ({ chatId }) => {
         try {
           await bot.sendMessage(chatId, message);
           if (!image) return;
           await bot.sendPhoto(chatId, image.data);
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
         }
       });
 

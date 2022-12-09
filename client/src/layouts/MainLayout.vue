@@ -15,12 +15,12 @@
 <script>
 import NavBar from "@/components/NavBar";
 import SideBar from "@/components/SideBar";
-import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "main-layout",
   components: { NavBar, SideBar },
-  methods: mapGetters(["getUsers"]),
+  methods: mapActions(["getUsers"]),
   mounted() {
     this.getUsers();
   },
