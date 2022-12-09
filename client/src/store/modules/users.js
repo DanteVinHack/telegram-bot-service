@@ -1,13 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   state: {
-    users: []
+    users: [],
   },
   getters: {
     users(state) {
-      return state.users;
-    }
+      return state.users.reverse();
+    },
+    usersLength(state) {
+      return state.users.length;
+    },
   },
   mutations: {
     changeUsers(state, users) {
@@ -18,33 +21,34 @@ export default {
     },
     removeAllUsers(state) {
       state.users = [];
-    }
+    },
   },
   actions: {
     async getUsers({ commit }) {
       try {
-        commit('toggleIsLoading');
-        const response = await axios.get('http://localhost:4000/users');
+        commit("toggleIsLoading");
+        const response = await axios.get("http://localhost:4000/users");
         const users = await response.data;
-        commit('toggleIsLoading');
+        commit("toggleIsLoading");
 
-        commit('changeUsers', users);
+        commit("changeUsers", users);
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
       }
-
     },
     async removeUser({ commit }, _id) {
       try {
-        const response = await axios.delete(`http://localhost:4000/users/${_id}`);
+        const response = await axios.delete(
+          `http://localhost:4000/users/${_id}`
+        );
 
         if (response.status === 200) {
-          commit('removeUser', _id);
+          commit("removeUser", _id);
         } else {
-          console.log(response.status)
+          console.log(response.status);
         }
       } catch (error) {
-          console.log(error.message)
+        console.log(error.message);
       }
     },
     async removeAllUsers({ commit }) {
@@ -52,13 +56,13 @@ export default {
         const response = await axios.delete(`http://localhost:4000/users/`);
 
         if (response.status === 200) {
-          commit('removeAllUsers');
+          commit("removeAllUsers");
         } else {
-          console.log(response.status)
+          console.log(response.status);
         }
       } catch (error) {
-          console.log(error.message)
+        console.log(error.message);
       }
-    }
+    },
   },
-}
+};
