@@ -2,9 +2,7 @@
   "semi": true,
   "arrowParens": "avoid",
   "editorconfig": true,
-  "singleAttributePerLine": false,
   "singleQuote": false,
-  "jsxSingleQuote": false,
   "endOfLine": "cr",
-  "vueIndentScriptAndStyle": true
+  "vueIndentScriptAndStyle": false
 }
