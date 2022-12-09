@@ -1,37 +1,62 @@
-const Setting = require('../models/Setting');
-const startBot = require('../telegram-bot')
+const path = require("path");
+const fs = require("fs");
+const config = require("config");
 
-const Router = require('express');
+const Setting = require("../models/Setting");
+const startBot = require("../telegram-bot");
+
+// Router init
+const Router = require("express");
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const setting = await Setting.findOne();
+router.get("/", async (req, res) => {
+  let settings = await Setting.findOne();
 
-  res.status(200).json(setting)
-})
-
-router.post('/', async (req, res) => {
-  // const fileName = FileService.saveFile(req.files.startImage);
-  const settings = req.body;
-  let newSettings;
-
-  if (settings._id) {
-    newSettings = await Setting.findOne();
-
-    if (newSettings.token !== settings.token) {
-      startBot(settings.token, settings.startText, settings.startImage);
-    }
-    
-    await Setting.updateOne({ _id: settings._id }, {$set: settings});
-  } else {
-    newSettings = new Setting(settings);
-
-    startBot(newSettings.token, newSettings.startText, newSettings.startImage);
-
-    await newSettings.save();
+  if (!settings) {
+    settings = config.get("settings");
   }
 
-  res.status(201)
-})
+  res.status(200).json(settings);
+});
 
-module.exports = {name: 'settings', router};
+router.post("/", async (req, res) => {
+  const settings = req.body;
+  const startImage = req?.files?.image;
+
+  console.log(settings);
+  console.log(req.body);
+  console.log(req?.files);
+  let currentSettings = await Setting.findOne();
+
+  const imagePath = path.resolve("static", "startImage.jpg");
+
+  if (startImage && currentSettings?.startImagePath) {
+    fs.unlinkSync(imagePath);
+  }
+
+  startImage?.mv(imagePath);
+  settings.startImagePath = imagePath || "";
+
+  if (settings._id) {
+    const { token } = settings;
+
+    if (currentSettings.token !== token) {
+      startBot(token);
+    }
+
+    await Setting.updateOne({ _id: settings._id }, { $set: settings });
+  } else {
+    currentSettings = new Setting(settings);
+    const { token } = currentSettings;
+
+    if (token) {
+      startBot(token);
+    }
+
+    await currentSettings.save();
+  }
+
+  res.status(201);
+});
+
+module.exports = { name: "settings", router };

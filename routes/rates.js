@@ -5,7 +5,6 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   const rates = await Rate.find()
-  console.log(rates);
 
   res.status(200).json(rates)
 })

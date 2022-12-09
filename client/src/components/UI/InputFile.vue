@@ -3,20 +3,15 @@
 </template>
 
 <script>
-  export default {
-    name: "InputFile",
-    props: {
-      msg: {
-        typeof: String,
-        require: true,
-      },
-    },
-    methods: {
-      getFile(e) {
-        const [file] = e.target.files;
+export default {
+  name: "InputFile",
+  props: {},
+  methods: {
+    getFile(e) {
+      const [file] = e.target.files;
 
-        this.$emit("get-image", file);
-      },
+      this.$emit("get-file", file);
     },
-  };
+  },
+};
 </script>

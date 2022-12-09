@@ -1,67 +1,52 @@
 <template>
-  <form @submit.prevent='submitLink' class="links">
-
-    <SectionHeader>
-      Сообщение пользователям
-    </SectionHeader>
+  <form @submit.prevent="submitLink" class="links">
+    <SectionHeader> Сообщение пользователям </SectionHeader>
 
     <div class="links__inner w-50">
+      <h2 class="links__title fs-4 mb-4 mt-5">Сообщения для прользователей</h2>
 
-    <h2 class="links__title fs-4 mb-4 mt-5">
-      Сообщения для прользователей
-    </h2>
+      <textarea
+        class="form-control resize"
+        placeholder="Сообщения для всех пользователей бота"
+        v-model="text"
+      ></textarea>
 
-    <textarea 
-      class="form-control resize" 
-      placeholder="Сообщения для всех пользователей бота"
-      v-model='text'
-    ></textarea>
+      <InputFile class="mt-3" @get-image="getImage" />
 
-    <InputFile
-      class='mt-3'
-      @get-image='getImage'
-    />
-
-    <button class="btn btn-primary mt-3">
-      Отправить
-    </button>
-
+      <button class="btn btn-primary mt-3">Отправить</button>
     </div>
-
   </form>
 </template>
 
 <script>
 export default {
-  name: 'LinksView',
+  name: "LinksView",
   data() {
     return {
-      image: '',
-      text: ''
-    }
+      image: "",
+      text: "",
+    };
   },
   methods: {
     async submitLink() {
       const formData = new FormData();
-      formData.append('message', this.text)
-      formData.append('image', this.image)
+      formData.append("message", this.text);
+      formData.append("image", this.image);
 
-      console.log(formData)
-      console.log(this.text, this.image)
+      console.log(formData);
+      console.log(this.text, this.image);
 
-      await this.axios.post('http://localhost:4000/links', formData, {
+      await this.axios.post("http://localhost:4000/links", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
-    getImage(file) {
-      this.image = file;
-    }
-  }
-}
+    getImage(image) {
+      this.image = image;
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

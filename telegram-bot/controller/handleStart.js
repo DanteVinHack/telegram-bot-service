@@ -1,41 +1,54 @@
-const { v4 } = require('uuid');
-const Setting = require('../../models/Setting')
-const User = require('../../models/User');
+// Node package
+const fs = require("fs");
 
-module.exports = (bot, image) => {
+// uuid
+const { v4 } = require("uuid");
 
+// models
+const Setting = require("../../models/Setting");
+const User = require("../../models/User");
+
+module.exports = bot => {
   return async ({ chat }) => {
     try {
       const chatId = chat.id;
-      const { startText } = await Setting.findOne()
-  
-      await bot.sendMessage(chatId, startText, {
+      const settings = await Setting.findOne();
+
+      console.log(settings);
+      if (settings?.startImagePath) {
+        const image = fs.readFileSync(settings?.startImagePath);
+        await bot.sendPhoto(chatId, image);
+      }
+
+      await bot.sendMessage(chatId, settings.startText, {
         reply_markup: {
           keyboard: [
-            [{text: '💵 Приобрести доступ' }, {text: '⌛️ Купленные тарифы' }],
-            [{text: '👩🏻‍💻 Тех. поддержка'}]
+            [
+              { text: "💵 Приобрести доступ" },
+              { text: "⌛️ Купленные тарифы" },
+            ],
+            [{ text: "👩🏻‍💻 Тех. поддержка" }],
           ],
-          resize_keyboard: true
-        }
+          resize_keyboard: true,
+        },
       });
-      
-      if (!await User.findOne({chatId})) {
+
+      if (!(await User.findOne({ chatId }))) {
         const date = new Date();
-  
+
         const user = new User({
           username: chat.username || chat.first_name,
           balance: 0,
           rates: [],
           registerDate: `${date.getMonth()}/${date.getDate()}/${date.getYear()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} PM`,
           chatId: chatId,
-          billId: v4()
-        })
-  
-        await user.save()
+          billId: v4(),
+        });
 
+        await user.save();
       }
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  }
-}
+  };
+};
