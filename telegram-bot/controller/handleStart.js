@@ -14,7 +14,6 @@ module.exports = bot => {
       const chatId = chat.id;
       const settings = await Setting.findOne();
 
-      console.log(settings);
       if (settings?.startImagePath) {
         const image = fs.readFileSync(settings?.startImagePath);
         await bot.sendPhoto(chatId, image);
