@@ -5,7 +5,6 @@
 <script>
 export default {
   name: "InputFile",
-  props: {},
   methods: {
     getFile(e) {
       const [file] = e.target.files;
