@@ -43,7 +43,7 @@ const startBot = async token => {
       const image = req.files?.image;
       const users = await User.find();
 
-      console.log(message)
+      console.log(req.files);
 
       users.forEach(async ({ chatId }) => {
         try {
