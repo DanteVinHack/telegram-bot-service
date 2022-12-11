@@ -11,7 +11,7 @@
         v-model="text"
       ></textarea>
 
-      <InputFile class="mt-3" @get-image="getImage" />
+      <InputFile class="mt-3" @get-file="getImage" />
 
       <button class="btn btn-primary mt-3">Отправить</button>
     </div>
@@ -23,7 +23,7 @@ export default {
   name: "LinksView",
   data() {
     return {
-      image: "",
+      image: null,
       text: "",
     };
   },
@@ -33,8 +33,8 @@ export default {
       formData.append("message", this.text);
       formData.append("image", this.image);
 
-      console.log(formData);
       console.log(this.text, this.image);
+      console.log(formData);
 
       await this.axios.post("http://localhost:4000/links", formData, {
         headers: {
@@ -44,6 +44,7 @@ export default {
     },
     getImage(image) {
       this.image = image;
+      console.log(this.image);
     },
   },
 };
