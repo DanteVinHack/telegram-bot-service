@@ -1,12 +1,9 @@
-const Order = require('../models/Order');
+const OrdersController = require('../controllers/OrdersController')
 
 const Router = require('express');
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const orders = await Order.find();
+router.get('/', OrdersController.getAll)
 
-  res.status(200).json(orders);
-})
 
 module.exports = {name: 'orders', router}

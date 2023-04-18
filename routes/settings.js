@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const config = require("config");
+const { exists } = require('../help')
 
 const Setting = require("../models/Setting");
 const startBot = require("../telegram-bot");
@@ -27,7 +28,7 @@ router.post("/", async (req, res) => {
 
   const imagePath = path.resolve("static", "startImage.jpg");
 
-  if (startImage && currentSettings?.startImagePath) {
+  if (startImage && await exists(path)) {
     fs.unlinkSync(imagePath);
   }
 

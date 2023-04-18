@@ -1,13 +1,9 @@
-module.exports = async (bot, chatId, id) => {
+const message = `
+Для оплаты переходите по ссылке - https://www.donationalerts.com/r/alinatgs
 
-  await bot.sendMessage(chatId, 'Выберите способ оплаты', {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {text: '🥝 Qiwi', callback_data: `qiwi&${id}`}, 
-          {text: '💳 Банковская карта', callback_data: `qiwi&${id}`}
-        ]
-      ]
-    }
-  })
+Вводите точную сумму и название тарифа. После оплаты бот автоматически выдаст вам тариф.
+`
+
+module.exports = async (bot, chatId) => {
+	await bot.sendMessage(chatId, message)
 }

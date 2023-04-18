@@ -38,9 +38,9 @@ const serverStart = async () => {
     connectionRouters(Routers);
 
     // Connection mongoose
-    mongoose.set({
-      strictQuery: true,
-    });
+		mongoose.set({
+			strictQuery: true
+		})
     await mongoose.connect(config.get("db_uri"));
     console.log("Database connected...");
 

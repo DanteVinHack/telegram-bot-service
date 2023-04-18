@@ -1,28 +1,14 @@
-const User = require('../models/User');
+const UserController = require('../controllers/UserController');
 
 const Router = require('express');
 const router = Router();
 
 
-router.get('/', async (req, res) => {
-  const users = await User.find();
+router.get('/', UserController.getAll)
 
-  res.status(200).json(users)
-})
+router.delete('/:id', UserController.deleteById)
 
-router.delete('/:id', async (req, res) => {
-  const { id: _id } = req.params;
+router.delete('/all', UserController.deleteAll)
 
-  await User.deleteOne({ _id });
-
-  res.status(200).json(_id)
-})
-
-router.delete('/all', async (req, res) => {
-  
-  await User.deleteMany({});
-
-  res.status(201).json('Все пользователи успешно удалены')
-})
 
 module.exports = {name: 'users', router};

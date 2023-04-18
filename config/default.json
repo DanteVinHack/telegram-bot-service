@@ -1,6 +1,6 @@
 {
   "port": "4000",
-  "db_uri": "mongodb://0.0.0.0:27017/telegram-bot",
+  "db_uri": "mongodb://127.0.0.1:27017/test",
   "settings": {
     "token": "",
     "secretKey": "",

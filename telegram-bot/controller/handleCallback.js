@@ -4,7 +4,6 @@ const toMainRates = require('./toMainRates');
 const sendPayForm = require('./sendPayForm');
 
 // Payment
-const checkPaid = require('../payment/checkPaid');
 const createPay = require('../payment/createPay');
 
 // Models
@@ -35,13 +34,10 @@ module.exports = (bot, wallet) => {
             await toMainRates(bot, chatId, message_id)
           break
         case 'pay':
-            await sendPayForm(bot, chatId, id)
+            await sendPayForm(bot, chatId)
           break
         case 'qiwi':
             await createPay(bot, chatId, user, wallet, id)
-          break
-        case 'check':
-            await checkPaid(bot, query.id, wallet, id)
           break
       }
   
